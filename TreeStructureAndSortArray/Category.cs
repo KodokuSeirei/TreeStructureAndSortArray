@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace TreeStructureAndSortArray
 {
     public class Category
     {
         public List<Category> Childrens { get; set; } = new List<Category>();
-        Category parent;
+        public Category Parent { get; set; }
         public string Name { get; set; }
         public int Count { get; set; }
         public Category(string name)
@@ -19,7 +17,7 @@ namespace TreeStructureAndSortArray
         //Метод добавления Сhildrens
         public void AddChild(Category category)
         {
-            category.parent = this;
+            category.Parent = this;
             Childrens.Add(category);
             Count++;
         }
@@ -55,17 +53,21 @@ namespace TreeStructureAndSortArray
         public static void Sort(Category category)
         {
             //Сортировка Childrens по Category.Name
-            category.Childrens = category.Childrens.OrderBy(o => o.Name).ToList();
-            for (int i = 0; i < category.Childrens.Count; i++)
+            if (category.Childrens.Count > 1)
             {
-                //Если имя элемента коллекции схоже с именем элемента следующей(соседней) коллекции, передаем ей элемент из следующей коллекции
-                if (i != category.Childrens.Count - 1 && category.Childrens[i].Name.ToString() == category.Childrens[i + 1].Name.ToString())
+                category.Childrens = category.Childrens.OrderBy(o => o.Name).ToList();
+                for (int i = 0; i < category.Childrens.Count; i++)
                 {
-                    category.Childrens[i].Childrens.Add(category.Childrens[i + 1].Childrens[0]);
-                    category.Childrens.Remove(category.Childrens[i + 1]);
-                    i--;
+                    //Если имя элемента коллекции схоже с именем элемента следующей(соседней) коллекции, передаем ей элемент из следующей коллекции
+                    if (i != category.Childrens.Count - 1 && category.Childrens[i].Name.ToString() == category.Childrens[i + 1].Name.ToString())
+                    {
+                        category.Childrens[i].Childrens.Add(category.Childrens[i + 1].Childrens[0]);
+                        category.Childrens.Remove(category.Childrens[i + 1]);
+                        i--;
+                    }
                 }
             }
+            else return;
         }
     }
 }

@@ -2,9 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace TreeStructureAndSortArray
 {
@@ -14,24 +13,23 @@ namespace TreeStructureAndSortArray
         {
             //Узнаем путь к файлу
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            //Стартовая локация - папка с приложением
+            openFileDialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
             //Фильтр отображаемых файлов
             openFileDialog.Filter = "text files(*.txt; *.csv)| *.txt; *.csv|All files (*.*)|*.*";
             openFileDialog.ShowDialog();
             List<string[]> arrayList = new List<string[]>();
-            string[] line;
+            string[] lines;
             //Создаем поток чтения файла 
             using (StreamReader readfile = new StreamReader(openFileDialog.FileName,Encoding.Default))
             {
                
                 //Записываем строки в массив
-                line = readfile.ReadToEnd().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                lines = readfile.ReadToEnd().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
-                for (int i = 0; i < line.Length; i++)
+                for (int i = 1; i < lines.Length; i++)
                 {
-                    arrayList.Add(line[i].Split(';'));
-                    //Т.к первая строка не нужна
-                    if (i == 0)
-                        arrayList.Clear();
+                    arrayList.Add(lines[i].Split(';'));                  
                 }
             }
             return arrayList.ToArray();
